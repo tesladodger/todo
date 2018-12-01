@@ -58,15 +58,22 @@ if args.help:
 
 def print_tasks():
     file = open('tasks.txt', 'r')
-    print('\n')
+    print('')
     num_of_lines = 0
     for line in file:
         line = str(num_of_lines) + ' - ' + line
         print(line)
         num_of_lines += 1
     if (num_of_lines == 0):
-        print('  Nothing to do.')
-        print('  Use \'todo -a\' to add a task')
+        print('  Nothing to do. Use \'todo -a\' to add a task')
+    file.close()
+
+
+def add_task():
+    print('\n  Description of the task:')
+    task_to_add = str(input('-> ')) + '\n'
+    file = open('tasks.txt', 'a')
+    file.write(task_to_add)
     file.close()
 
 
@@ -83,10 +90,7 @@ def main():
 
 
     if  args.add:
-        print('\n  Description of the task:')
-        task_to_add = str(input('-> ')) + '\n'
-        file = open('tasks.txt', 'a')
-        file.write(task_to_add)
+        add_task()
 
 
     if  args.remove:
@@ -102,7 +106,9 @@ def main():
 
 
     if  (args.add_number >= 1):
-        print('')
+        for i in range(args.add_number):
+            add_task()
+
 
     if args.clear:
         x = str(input('\nDelete all tasks? [Y/n] '))
