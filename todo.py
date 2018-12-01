@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import fileinput
 
 help_msg = '''
 USAGE
@@ -12,7 +13,7 @@ OPTIONAL ARGUMENTS
 
   -r                Remove a task
 
-  -n NUMBER         Remove NUMBER of tasks
+  -n NUMBER         Add NUMBER of tasks
 
   -c                Clear the task list
 
@@ -22,7 +23,7 @@ LONG ARGUMENTS
   -l --list
   -a --add
   -r --remove
-  -n --remove-number
+  -n --add-number
   -c --clear
   -h --help
 '''
@@ -38,7 +39,7 @@ parser.add_argument('-a', '--add',
 parser.add_argument('-r', '--remove',
                     action='store_true',
                     help='remove a task')
-parser.add_argument('-n', '--remove-number',
+parser.add_argument('-n', '--add-number',
                     default=0, type=int,
                     help='remove NUMBER of tasks')
 parser.add_argument('-c', '--clear',
@@ -55,6 +56,20 @@ if args.help:
     exit()
 
 
+def print_tasks():
+    file = open('tasks.txt', 'r')
+    print('\n')
+    num_of_lines = 0
+    for line in file:
+        line = str(num_of_lines) + ' - ' + line
+        print(line)
+        num_of_lines += 1
+    if (num_of_lines == 0):
+        print('  Nothing to do.')
+        print('  Use \'todo -a\' to add a task')
+    file.close()
+
+
 def main():
     try:    # Create file if it doesn't exist
         file = open('tasks.txt', 'r')
@@ -64,17 +79,7 @@ def main():
 
 
     if  args.list:
-        file = open('tasks.txt', 'r')
-        print('\n')
-        num_of_lines = 0
-        for line in file:
-            num_of_lines += 1
-            line = str(num_of_lines) + ' - ' + line
-            print(line)
-        if (num_of_lines == 0):
-            print('  Nothing to do.')
-            print('  Use \'todo -a\' to add a task')
-        file.close()
+        print_tasks()
 
 
     if  args.add:
@@ -85,10 +90,26 @@ def main():
 
 
     if  args.remove:
-        print('remove a task')
+        print_tasks()
+        try:
+            x = int(input('Number of the task to delete:\n -> '))
+        except ValueError:
+            print('Inut must be a valid integer')
+        for line in fileinput.input('tasks.txt', inplace=True):
+            if fileinput.lineno() == x+1:
+                continue
+            print(line, end='')
 
-    if  (args.remove_number >= 1):
-        print(args.remove_number)
+
+    if  (args.add_number >= 1):
+        print('')
+
+    if args.clear:
+        x = str(input('\nDelete all tasks? [Y/n] '))
+        if x == 'y' or x == 'Y':
+            file = open('tasks.txt', 'w')
+            file.write('')
+            file.close()
 
 
 if __name__ == '__main__':
