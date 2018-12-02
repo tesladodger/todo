@@ -58,7 +58,8 @@ parser.add_argument('-h', '--help',
 
 args = parser.parse_args()
 
-if args.help:
+
+if  args.help:
     print(help_msg)
     exit()
 
@@ -77,13 +78,18 @@ def print_tasks():  # Display tasks on screen
 
 
 def add_task():  # Add a task to the file
-    print('\n  Description of the task:')
-    task_to_add = str(input('-> ')) + '\n'
+    task_to_add = str(input('\n  Description of the task:\n -> '))
+    task_detail = str(input('  When/where (optional)\n -> '))
+    if task_detail != '':
+        task_to_add += '  @  ' + task_detail + '\n'
+    else:
+        task_to_add += '\n'
     file = open('tasks.txt', 'a')
     file.write(task_to_add)
     file.close()
 
 
+# ___________________________________________
 def main():
     try:    # Create file if it doesn't exist
         file = open('tasks.txt', 'r')
@@ -105,7 +111,7 @@ def main():
         try:
             x = int(input('Number of the task to delete:\n -> '))
         except ValueError:
-            print('Inut must be a valid integer')
+            print('Input must be a valid integer')
         for line in fileinput.input('tasks.txt', inplace=True):
             if fileinput.lineno() == x+1:
                 continue
@@ -117,15 +123,18 @@ def main():
             add_task()
 
 
-    if args.clear:  # Clear all tasks
+    if  args.clear:  # Clear all tasks
         x = str(input('\nDelete all tasks? [Y/n] '))
         if x == 'y' or x == 'Y':
             file = open('tasks.txt', 'w')
             file.write('')
             file.close()
+            print('  Tasks deleted')
+        else:
+            print('  Operation canceled')
 
 
-    if args.backup:
+    if  args.backup:  # Backup the tasks file
         dstin = str(input('\nName of the backup file:\n -> ')) + '.txt'
         dstin = dstin.replace(' ','')
         sauce = 'tasks.txt'
