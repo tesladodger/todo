@@ -75,6 +75,7 @@ def print_tasks():  # Display tasks on screen
     if (num_of_lines == 0):
         print('  Nothing to do. Use \'todo -a\' to add a task')
     file.close()
+    return num_of_lines
 
 
 def add_task():  # Add a task to the file
@@ -107,18 +108,19 @@ def main():
 
 
     if  args.remove:  # Remove a task
-        print_tasks()
-        try:
-            x = int(input('Number of the task to delete:\n -> '))
-        except ValueError:
-            print('Input must be a valid integer')
-        file = open('tasks.txt', 'r')
-        with open('tasks.txt', 'r') as textobj:
-        	lines_in_file = list(textobj)
-        del lines_in_file[x]
-        with open('tasks.txt', 'w') as textobj:
-        	for n in lines_in_file:
-        		textobj.write(n)
+        num_of_lines = print_tasks()
+        if num_of_lines != 0:
+            try:
+                x = int(input('Number of the task to delete:\n -> '))
+            except ValueError:
+                print('Input must be a valid integer')
+            file = open('tasks.txt', 'r')
+            with open('tasks.txt', 'r') as textobj:
+                lines_in_file = list(textobj)
+            del lines_in_file[x]
+            with open('tasks.txt', 'w') as textobj:
+                for n in lines_in_file:
+                    textobj.write(n)
 
 
     if  (args.add_number >= 1):  # Add number of tasks
