@@ -112,10 +112,13 @@ def main():
             x = int(input('Number of the task to delete:\n -> '))
         except ValueError:
             print('Input must be a valid integer')
-        for line in fileinput.input('tasks.txt', inplace=True):
-            if fileinput.lineno() == x+1:
-                continue
-            print(line, end='')
+        file = open('tasks.txt', 'r')
+        with open('tasks.txt', 'r') as textobj:
+        	lines_in_file = list(textobj)
+        del lines_in_file[x]
+        with open('tasks.txt', 'w') as textobj:
+        	for n in lines_in_file:
+        		textobj.write(n)
 
 
     if  (args.add_number >= 1):  # Add number of tasks
