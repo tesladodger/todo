@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import argparse
 import fileinput
+import time
+import datetime
 from shutil import copyfile
 
 help_msg = '''
@@ -100,6 +102,7 @@ def main():
 
 
     if  args.list:  # Display tasks
+        print('\n  ', datetime.datetime.now().strftime('%d/%m/%y'))
         print_tasks()
 
 
