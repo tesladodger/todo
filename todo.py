@@ -102,7 +102,7 @@ def main():
 
 
     if  args.list:  # Display tasks
-        print('\n  ', datetime.datetime.now().strftime('%d/%m/%y'))
+        print('\n  ', datetime.datetime.now().strftime('%Y-%m-%d'))
         print_tasks()
 
 
